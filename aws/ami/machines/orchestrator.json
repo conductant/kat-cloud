@@ -1,0 +1,30 @@
+{
+  "_comment": "Base AMI is Ubuntu 14.04.  See https://www.packer.io/docs/builders/amazon.html for specifying credentials",
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "us-west-2",
+      "instance_type": "t2.micro",
+      "ami_name": "cloud-orchestrator {{timestamp}}",
+      "source_ami": "ami-9abea4fb",
+      "ssh_username": "ubuntu"
+    },
+    {
+      "type": "docker",
+      "image": "ubuntu:trusty",
+      "discard": true
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "../components/tools.sh",
+        "../components/jre.sh",
+        "../components/zookeeper.sh",
+        "../components/mesos.sh",
+        "../components/aurora-scheduler.sh"]
+    }
+  ]
+}
